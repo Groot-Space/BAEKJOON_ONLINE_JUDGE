@@ -1,0 +1,23 @@
+import sys
+
+def solve(text):
+    right = []
+    left = []
+    for i in text[0]:
+        if i == '<':
+            if len(left) > 0:
+                right.append(left.pop())
+        elif i == '>':
+            if len(right) > 0:
+                left.append(right.pop())
+        elif i == '-' and len(left) > 0:
+            left.pop()
+        else:
+            left.append(i)
+    left.extend(reversed(right))
+    print(''.join(left))
+
+tastcase = int(sys.stdin.readline())
+for i in range(tastcase):
+    solve(sys.stdin.readline().split())
+  
