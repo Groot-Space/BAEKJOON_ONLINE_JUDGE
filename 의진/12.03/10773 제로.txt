@@ -1,0 +1,12 @@
+n = int(input())
+st = []
+a = []
+for i in range(n):
+  st.append(int(input()))
+
+for i in st:
+  if i != 0:
+    a.append(i)
+  else:
+    a.pop()
+print(sum(a))
