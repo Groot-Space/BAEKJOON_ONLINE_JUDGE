@@ -1,72 +1,33 @@
+def makestring(l,s):
+    s = s[:l[0]] + str(l[1]) + l[2] + s[l[3]:]
+    return s
+def RLE(s_split,s):
+    start = 0
+    end = s_split
+    while end <= len(s):
+        cri = s[start:end]
+        count = 1
+        com_start = end
+        com_end = end + s_split
+        while com_end <= len(s):
+            if cri == s[com_start:com_end]:
+                count += 1
+                com_start += s_split
+                com_end += s_split
+            elif count > 1 or (count > 1 and com_end <= len(s)):
+                s = makestring([start,count,cri,com_end-s_split],s)
+                break
+            else:
+                break
+        start += s_split
+        end += s_split
+
+    return len(s), s
+#메인
 f = open('testcase.txt', 'r')
 line = f.readline().rstrip()
-
-arr1 = []
-arr3 = []
-maxinterval = len(line) // 2
-
-#단어 묶음별 분할
-for i in range(2,maxinterval):
-    start = 0
-    end = i
-    arr2 = []
-    while True:
-        if end > len(line):
-            break
-
-        else:
-            arr2.append([start,0,line[start:end]])
-
-        start += 1
-        end += 1
-    arr1.append(arr2)
-
-#중복횟수 카운트
-interval = 1
-for j in arr1:
-    interval += 1
-
-    for k in j:
-        start = 0
-        end = interval
-
-        # print(k)
-        while True:
-            if end > len(line):
-                break
-
-            elif k[2] == line[start:end]:
-                k[1] += 1
-
-            # print(k[2]," : ",line[start:end])
-            start += 1
-            end += 1
-
-        if k[1] > 1:
-            if len(arr3) != 0:
-                flag = 0
-                for l in arr3:
-                    if l[2] == k[2]:
-                        flag += 1
-                if flag == 0:
-                    arr3.append(k)
-            else:
-                arr3.append(k)
-
-def sort(arr):
-    front = 0
-    mid = len(arr) //2
-    end = len(arr)-1
-
-    while True:
-        if front == end:
-            return arr
-        elif arr[front][1] < arr[mid][1]:
-            temp = arr[front]
-            arr[front] = arr[mid]
-            arr[mid] = temp
-
-
-#결과확인
-for l in arr3:
-    print(l)
+ret = [[len(line),line]]
+for i in range(1,len(line)//2):
+    length, s = RLE(i,ret[-1][1])
+    print(s)
+    ret.append([length,s])
