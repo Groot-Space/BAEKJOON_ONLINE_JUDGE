@@ -8,5 +8,5 @@ def multiplication(a,b,c):
         return (val * a) % c
 
 f = open('testcase.txt', 'r')
-line = list(map(int,f.readline().split()))
-print(line)
+a, b, c = list(map(int,f.readline().split()))
+print(multiplication(a,b,c))
