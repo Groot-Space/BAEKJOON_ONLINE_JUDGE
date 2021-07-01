@@ -10,7 +10,13 @@ n, m = list(map(int,f.readline().split()))
 
 arr = [list(map(int, f.readline().split())) for i in range(m)]
 
-parent = [i for i in range(n+1)]
+high = max(arr, key = lambda x: x[0])[0]
+high2 = max(arr, key = lambda x: x[1])[1]
+
+if high < high2:
+    high = high2
+
+parent = [i for i in range(high + 1)]
 
 def get_parent(parent, x):
     if parent[x] == x:
@@ -36,11 +42,10 @@ def check_parent(parent, a, b):
         return 0
 
 arr = sorted(arr, key = lambda x : x[2])
-# print(arr)
 
 count = 0
 total = 0
-while count < n:
+while count < len(arr):
     if check_parent(parent,arr[count][0],arr[count][1]) == 0:
         union(parent, arr[count][0], arr[count][1])
         total += arr[count][2]
