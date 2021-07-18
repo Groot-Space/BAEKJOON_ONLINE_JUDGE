@@ -37,3 +37,20 @@
 #
 # cmd = ["U 13", "C", "D 13", "C", "Z", "Z","U_1","U 13", "C", "D 13", "C", "Z", "Z","U_1"]
 # solution(20, 15, cmd)
+
+
+def solution(money, minratio, maxratio, ranksize, threshold, months):
+    matric = []
+    ratio = minratio -1
+    i = 0
+    while ratio <= maxratio:
+        if i == 0:
+            matric.append([threshold, 0])
+        else :
+            ratio += 1
+            matric.append([matric[i-1][0] + ranksize, ratio])
+
+        i += 1
+    print(matric)
+
+solution(1234578, 10, 20, 250000, )
