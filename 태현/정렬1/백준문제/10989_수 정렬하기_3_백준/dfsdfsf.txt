@@ -1,0 +1,111 @@
+from collections import deque
+
+def m_up(arr, k, cur):
+    i = 0
+    while i < k:
+        cur = arr[cur][0]
+        i += 1
+    return cur
+
+def m_down(arr, k, cur):
+    i = 0
+    while i < k:
+        cur = arr[cur][2]
+        i += 1
+    return cur
+
+def remove(arr,cur,stack,start): # 지우는게 맨 앞, 중간, 맨 마지막일 때 각 각 고려
+    item = arr[cur][1]
+    
+    if arr[cur][0] == 0: # 맨 앞
+        cur = arr[cur][2]
+        stack.append([-1,item])
+        arr[cur][0] = 0
+        return cur, cur
+    
+    elif arr[cur][2] == -2: # 맨 뒤
+        before = arr[cur][0]
+        arr[before][2] = -2
+        stack.append([arr[before][1],item])
+        return before, start
+    
+    else : # 중간
+        before = arr[cur][0]
+        after = arr[cur][2]
+        arr[before][2] = after
+        arr[after][0] = before
+        stack.append([arr[before][1], item])
+        return after, start
+
+def recover(arr,cur,stack,start): #복구 위치가 맨 앞, 맨 뒤, 중간일 때 고려
+    before, item = stack.pop()
+    point = start
+    #복구 위치 찾기
+    #복구 위치가 맨 앞일 때.
+    if before == -1:
+        arr[point][0] = len(arr)
+        node = [0,item, point]
+        arr.append(node)
+        start = len(arr)
+        return start
+    else:
+        while arr[point][1] != before:
+            point = arr[point][2]
+        if arr[point][2] != -2:
+            nxt = arr[point][2]
+            arr[point][2] = len(arr)
+            arr[nxt][0] = len(arr)
+            node = [point, item, nxt]
+            arr.append(node)
+            return start
+        else :
+            arr[point][2] = len(arr)
+            node = [point,item,-2]
+            arr.append(node)
+            return start
+                
+    
+def list_print(arr,cur,n,answer,start):
+    i = 0
+    while i < n:
+        if arr[start][1] != i:
+            # print('X')
+            answer += 'X'
+            i += 1
+        else :
+            # print('O')
+            answer += 'O'
+            start = arr[start][2]
+            i += 1
+    return answer
+
+def solution(n, k, cmd):
+    n = 8
+    k = 3
+    cmd = ["C","C","C","C","C","C","C","C"]#"Z","Z","Z","Z","Z","Z","Z","Z"
+    arr = deque([[i-1,i,i+1] for i in range(n+1)])
+    arr[0][0] = 0
+    arr[len(arr)-1][2] = -2
+    stack = deque()
+    cur = k
+    start = 0
+    answer = ''
+    for c in cmd:
+        # print(cur)
+        _c = c.split()
+        if _c[0] == 'U':
+            cur = m_up(arr,int(_c[1]), cur)
+            # print(cur)
+        elif _c[0] == 'D':
+            cur = m_down(arr,int(_c[1]), cur)
+            # print(cur)
+        elif _c[0] == 'C':
+            cur, start = remove(arr,cur,stack,start)
+            print(arr,cur)
+            print(stack)
+            # print(stack)
+        else :
+            start = recover(arr,cur,stack,start)
+            # print(arr)
+    # return list_print(arr,cur,n,answer,start)
+    # print(arr[cur])
