@@ -10,7 +10,7 @@ rope = sorted(rope)
 ans = 0
 
 for i in range(len(rope)):
-    tmp = rope[i] * n
+    tmp = rope[i] * i
     if ans < tmp:
         ans = tmp
     n -= 1
